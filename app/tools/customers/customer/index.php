@@ -11,7 +11,10 @@ $User->check_user_session();
 $User->check_module_permissions ("customers", User::ACCESS_R, true);
 
 # fetch customer
-$customer = $Tools->fetch_object("customers", "title", urldecode($GET->subnetId));
+/* urldecode() will yield "Invalid customer" when using some Swedish characters in the "Title"-column when "Prettify links" is in use.
+ * nesting urldecode within html_entity_decode fixes it.
+ */
+$customer = $Tools->fetch_object("customers", "title", html_entity_decode(urldecode($GET->subnetId)));
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('customers');
